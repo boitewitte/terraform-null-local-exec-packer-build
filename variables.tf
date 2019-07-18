@@ -18,6 +18,12 @@ variable "force" {
   default = false
 }
 
+variable "force_build" {
+  type = bool
+  description = "Forces a build on every execution, even if configuration is not changed"
+  default = false
+}
+
 variable "on_error" {
   type = string
   description = "Selects what to do when the build fails. (valid values: cleanup, abort, ask)"

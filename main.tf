@@ -25,10 +25,12 @@ locals {
   ])
 
   working_dir = var.working_dir != null ? var.working_dir : path.cwd
+  force_build = var.force_build ? timestamp() : "false"
 }
 
 resource "null_resource" "build" {
   triggers = {
+    force_build = local.force_build
     binary = var.packer_binary
     except = local.except
     force = local.force
@@ -42,9 +44,9 @@ resource "null_resource" "build" {
     environment = local.environment_string
   }
 
-  provisioner "local-exec" {
-    command = "${var.packer_binary} build -color=false ${local.except} ${local.force} ${local.on_error} ${local.only} ${local.parallel_builds} ${local.var_files} ${local.vars} ${var.template_file}"
-    environment = var.environment
-    working_dir = local.working_dir
-  }
+  # provisioner "local-exec" {
+  #   command = "${var.packer_binary} build -color=false ${local.except} ${local.force} ${local.on_error} ${local.only} ${local.parallel_builds} ${local.var_files} ${local.vars} ${var.template_file}"
+  #   environment = var.environment
+  #   working_dir = local.working_dir
+  # }
 }
