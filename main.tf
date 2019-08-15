@@ -16,7 +16,7 @@ locals {
   ])
   vars = join(" ", [
     for key, value in var.vars:
-      "-var '${key}=\"${value}\"'"
+      "-var '${key}=${value}'"
   ])
 
   environment_string = join(" ", [
