@@ -15,17 +15,17 @@ locals {
       "-var-file ${file}"
   ])
   vars = join(" ", [
-    for value, key in var.vars:
+    for key, value in var.vars:
       "-var '${key}=\"${value}\"'"
   ])
 
   environment_string = join(" ", [
-    for value, key in var.environment:
+    for key, value in var.environment:
       "${key}=${value}"
   ])
 
   working_dir = var.working_dir != null ? var.working_dir : path.cwd
-  force_build = var.force_build ? timestamp() : "false"
+  force_build = var.force_build ? "${timestamp()}" : "false"
 }
 
 resource "null_resource" "build" {
@@ -44,9 +44,9 @@ resource "null_resource" "build" {
     environment = local.environment_string
   }
 
-  # provisioner "local-exec" {
-  #   command = "${var.packer_binary} build -color=false ${local.except} ${local.force} ${local.on_error} ${local.only} ${local.parallel_builds} ${local.var_files} ${local.vars} ${var.template_file}"
-  #   environment = var.environment
-  #   working_dir = local.working_dir
-  # }
+  provisioner "local-exec" {
+    command = "${var.packer_binary} build -color=false ${local.except} ${local.force} ${local.on_error} ${local.only} ${local.parallel_builds} ${local.var_files} ${local.vars} ${var.template_file}"
+    environment = var.environment
+    working_dir = local.working_dir
+  }
 }
