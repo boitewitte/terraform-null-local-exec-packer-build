@@ -14,3 +14,7 @@ output "working_dir" {
 output "environment" {
   value = var.environment
 }
+
+output "vars" {
+  value = var.vars
+}
